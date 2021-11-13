@@ -1,1 +1,5 @@
-# blockchain_demo_whith_python
+Basic python blockchain implemetation
+
+
+
+
