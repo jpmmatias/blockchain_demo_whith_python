@@ -8,10 +8,13 @@ class Chain:
     self.pool =[]
     self.create_origin_block()
 
+  def validnonce(self , block, hash):
+    return block.hash.hexdigest() == hash.hexdigest() and int(hash.hexdigest(),16) < 2**(256-self.difficulty) and block.previous_hash == self.blocks[-1].hash
+
   def proof_of_work(self,block):
     hash = hashlib.sha256()
     hash.update(str(block).encode('utf-8'))
-    return block.hash.hexdigest() == hash.hexdigest() and int(hash.hexdigest(),16) < 2**(256-self.difficulty) and block.previous_hash == self.blocks[-1].hash
+    return self.validnonce(block, hash)
 
   def add_to_chain(self,block):
     if self.proof_of_work(block):
@@ -27,11 +30,16 @@ class Chain:
     origin.mine(self.difficulty)
     self.blocks.append(origin)
 
-
   def mine(self):
     if len(self.pool) > 0:
       data = self.pool.pop()
       block = Block(data, self.blocks[-1].hash)
       block.mine(self.difficulty)
       self.add_to_chain(block)
+      print("\n==============================")
+      print("Hash: ",block.hash.hexdigest())
+      print("Previous hash: ", block.previous_hash.hexdigest())
+      print("Nonce: ",block.nonce)
+      print("Data: ",block.data)
+      print("==============================")
 

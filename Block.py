@@ -10,6 +10,8 @@ class Block():
   def mine(self,difficulty):
     self.hash.update(str(self).encode('utf-8'))
     while int(self.hash.hexdigest(), 16) > 2**(256-difficulty):
+      if self.nonce % 100000 == 0:
+        print('.',end ='')
       self.nonce +=1
       self.hash = hashlib.sha256()
       self.hash.update(str(self).encode('utf-8'))
